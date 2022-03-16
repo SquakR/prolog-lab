@@ -1,7 +1,13 @@
 <template>
-  <div>Hello World</div>
-  <div>Value: {{ value }}</div>
-  <input type="button" value="Inc" @click="inc" />
+  <VContainer>
+    <VRow>
+      <VCol>
+        <div>Hello World</div>
+        <div>Value: {{ value }}</div>
+        <VBtn color="primary" @click="inc">Inc</VBtn>
+      </VCol>
+    </VRow>
+  </VContainer>
 </template>
 
 <script lang="ts">
