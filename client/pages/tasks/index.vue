@@ -1,10 +1,9 @@
 <template>
-  <VMain>Index</VMain>
+  <div>Tasks Index</div>
 </template>
 
 <script lang="ts" setup>
 definePageMeta({
-  title: 'Index',
   middleware() {
     return navigateTo({ name: 'tasks-relationship_graph' })
   }

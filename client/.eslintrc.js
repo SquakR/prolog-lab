@@ -19,6 +19,7 @@ module.exports = {
     'prettier'
   ],
   rules: {
-    'vue/multi-word-component-names': 'off'
+    'vue/multi-word-component-names': 'off',
+    'no-undef': 'off'
   }
 }
