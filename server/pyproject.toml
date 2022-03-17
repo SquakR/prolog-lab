@@ -10,6 +10,8 @@ python = "^3.9"
 fastapi = "^0.75.0"
 uvicorn = {extras = ["standard"], version = "^0.17.6"}
 pyswip = "^0.2.10"
+motor = "^2.5.1"
+aiofiles = "^0.8.0"
 
 [tool.poetry.dev-dependencies]
 
