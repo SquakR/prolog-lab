@@ -1,0 +1,7 @@
+.idea
+client/node_modules
+client/nuxt-build
+client/nuxt.d.ts
+*.log
+.output
+.env
