@@ -10,16 +10,12 @@
   </VRow>
 </template>
 
-<script lang="ts">
-import { useProgramCode } from '../../http/lists'
+<script lang="ts" setup>
+import { useProgramCode } from '@/http/lists'
 
-export default defineComponent({
-  async setup() {
-    useMeta({ title: 'Relationship graph' })
-    const { data: programCode } = await useProgramCode()
-    return {
-      programCode
-    }
-  }
+definePageMeta({
+  title: 'Lists'
 })
+
+const { data: programCode } = await useProgramCode()
 </script>

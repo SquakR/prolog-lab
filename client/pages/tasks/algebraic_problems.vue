@@ -10,16 +10,12 @@
   </VRow>
 </template>
 
-<script lang="ts">
-import { useProgramCode } from '../../http/algebraic_problems'
+<script lang="ts" setup>
+import { useProgramCode } from '@/http/relationship_graph'
 
-export default defineComponent({
-  async setup() {
-    useMeta({ title: 'Relationship graph' })
-    const { data: programCode } = await useProgramCode()
-    return {
-      programCode
-    }
-  }
+definePageMeta({
+  title: 'Algebraic problems'
 })
+
+const { data: programCode } = await useProgramCode()
 </script>
