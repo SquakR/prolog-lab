@@ -5,11 +5,15 @@ export default defineNuxtConfig({
   buildDir: 'nuxt-build',
   css: ['vuetify/lib/styles/main.sass'],
   build: {
-    transpile: ['vuetify']
+    transpile: ['vuetify', '@highlightjs/vue-plugin']
   },
   vite: {
     define: {
       'process.env.DEBUG': 'false'
     }
+  },
+  publicRuntimeConfig: {
+    SERVER_API_URL: process.env.SERVER_API_URL,
+    CLIENT_API_URL: process.env.CLIENT_API_URL
   }
 })

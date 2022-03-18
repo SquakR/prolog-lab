@@ -1,5 +1,6 @@
 from fastapi import APIRouter
 
+from prolog import lists_prolog_wrapper
 
 router = APIRouter(
     prefix='/lists',
@@ -7,6 +8,6 @@ router = APIRouter(
 )
 
 
-@router.get('/')
-async def main():
-    return 'Main'
+@router.get('/program_code/')
+async def program_code():
+    return await lists_prolog_wrapper.program_code

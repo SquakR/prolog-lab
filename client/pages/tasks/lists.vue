@@ -10,7 +10,16 @@
   </VRow>
 </template>
 
-<script lang="ts" setup>
-const programCode = `mergesort([],[]). % special case
-mergesort([A],[A]).`
+<script lang="ts">
+import { useProgramCode } from '../../http/lists'
+
+export default defineComponent({
+  async setup() {
+    useMeta({ title: 'Relationship graph' })
+    const { data: programCode } = await useProgramCode()
+    return {
+      programCode
+    }
+  }
+})
 </script>

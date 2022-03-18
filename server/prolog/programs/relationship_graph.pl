@@ -4,8 +4,14 @@ mother(A, B):-female(A), parent(A, B).
 grandmother(A, B):-mother(A, C), parent(C, B).
 grandfather(A, B):-father(A, C), parent(C, B).
 
-unilateral_sibling(A, B):-father(C, A), father(C, B), mother(C, A), mother(C, B).
-sibling(A, B):-unilateral_sibling(A, B); unilateral_sibling(B, A).
+unilateral_sibling(A, B):-
+    father(C, A),
+    father(C, B),
+    mother(C, A),
+    mother(C, B).
+sibling(A, B):-
+    unilateral_sibling(A, B);
+    unilateral_sibling(B, A).
 brother(A, B):-male(A), sibling(A, B).
 sister(A, B):-female(A), sibling(A, B).
 

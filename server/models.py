@@ -3,7 +3,7 @@ from enum import Enum
 from bson import ObjectId
 from pydantic import BaseModel, Field
 
-from server.utils import PyObjectId
+from utils import PyObjectId
 
 
 class Gender(str, Enum):
