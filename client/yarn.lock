@@ -299,6 +299,14 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
+"@highlightjs/vue-plugin@next":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@highlightjs/vue-plugin/-/vue-plugin-2.0.1.tgz#8fcc4b0c1a58e40b65db80f8c85c935a08267c13"
+  integrity sha512-6pmLh+VSvswavU7RB0BnWLp/9ITX6UYeVmR1gkFKQ4yx777lOCsGZOKc+1rswBDlD+bWb0xXVig85A7GEU2Vsg==
+  dependencies:
+    highlight.js "^11.0.1"
+    vue "^3"
+
 "@humanwhocodes/config-array@^0.9.2":
   version "0.9.5"
   resolved "https://registry.yarnpkg.com/@humanwhocodes/config-array/-/config-array-0.9.5.tgz#2cbaf9a89460da24b5ca6531b8bbfc23e1df50c7"
@@ -2576,6 +2584,11 @@ he@^1.1.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/he/-/he-1.2.0.tgz#84ae65fa7eafb165fddb61566ae14baf05664f0f"
   integrity sha512-F/1DnUGPopORZi0ni+CvrCgHQ5FyEAHRLSApuYWMmrbSwoN2Mn/7k+Gl38gJnR7yyDZk6WLXwiGod1JOWNDKGw==
+
+highlight.js@^11.0.1:
+  version "11.5.0"
+  resolved "https://registry.yarnpkg.com/highlight.js/-/highlight.js-11.5.0.tgz#00abb7ed926491adbdabc93a4f3fd2b88b451b4a"
+  integrity sha512-SM6WDj5/C+VfIY8pZ6yW6Xa0Fm1tniYVYWYW1Q/DcMnISZFrC3aQAZZZFAAZtybKNrGId3p/DNbFTtcTXXgYBw==
 
 hookable@^5.1.1:
   version "5.1.1"
@@ -4942,7 +4955,7 @@ vue-server-renderer@^2.6.14:
     serialize-javascript "^3.1.0"
     source-map "0.5.6"
 
-vue@^3.2.31:
+vue@^3, vue@^3.2.31:
   version "3.2.31"
   resolved "https://registry.yarnpkg.com/vue/-/vue-3.2.31.tgz#e0c49924335e9f188352816788a4cca10f817ce6"
   integrity sha512-odT3W2tcffTiQCy57nOT93INw1auq5lYLLYtWpPYQQYQOOdHiqFct9Xhna6GJ+pJQaF67yZABraH47oywkJgFw==
