@@ -11,7 +11,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useProgramCode } from '~/data/algebraic_problems'
+import { useProgramCode } from '~/requests/algebraic_problems'
 
 definePageMeta({
   title: 'Algebraic problems'

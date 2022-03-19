@@ -25,15 +25,16 @@ export class RelationshipGraphService {
 
   /**
    * Add Person
-   * @param name 
-   * @param gender 
    * @returns Person Successful Response
    * @throws ApiError
    */
-  public addPersonApiRelationshipGraphAddPersonPost(
+  public addPersonApiRelationshipGraphAddPersonPost({
+name,
+gender,
+}: {
 name: string,
 gender: Gender,
-): CancelablePromise<Person> {
+}): CancelablePromise<Person> {
     return this.httpRequest.request({
       method: 'POST',
       url: '/api/relationship_graph/add_person/',
@@ -49,13 +50,14 @@ gender: Gender,
 
   /**
    * Delete Person
-   * @param personId 
    * @returns any Successful Response
    * @throws ApiError
    */
-  public deletePersonApiRelationshipGraphDeletePersonDelete(
+  public deletePersonApiRelationshipGraphDeletePersonDelete({
+personId,
+}: {
 personId: string,
-): CancelablePromise<any> {
+}): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'DELETE',
       url: '/api/relationship_graph/delete_person/',
@@ -70,15 +72,16 @@ personId: string,
 
   /**
    * Change Gender
-   * @param personId 
-   * @param gender 
    * @returns any Successful Response
    * @throws ApiError
    */
-  public changeGenderApiRelationshipGraphChangeGenderPatch(
+  public changeGenderApiRelationshipGraphChangeGenderPatch({
+personId,
+gender,
+}: {
 personId: string,
 gender: Gender,
-): CancelablePromise<any> {
+}): CancelablePromise<any> {
     return this.httpRequest.request({
       method: 'PATCH',
       url: '/api/relationship_graph/change_gender/',

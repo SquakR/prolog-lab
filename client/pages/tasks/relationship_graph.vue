@@ -2,7 +2,7 @@
   <VRow>
     <VCol cols="6">
       <h1>Relationship graph</h1>
-      <PersonsGraph :persons="persons" />
+      <PersonsGraph :persons="persons" @deletePerson="deletePerson" />
     </VCol>
     <VCol cols="6">
       <h1>Prolog code</h1>
@@ -12,7 +12,11 @@
 </template>
 
 <script lang="ts" setup>
-import { usePersons, useProgramCode } from '~/data/relationship_graph'
+import {
+  usePersons,
+  useDeletePerson,
+  useProgramCode
+} from '~/requests/relationship_graph'
 import PersonsGraph from '~/components/PersonsGraph.vue'
 
 definePageMeta({
@@ -21,4 +25,9 @@ definePageMeta({
 
 const { data: persons } = await usePersons()
 const { data: programCode } = await useProgramCode()
+
+const deletePerson = async (id: string) => {
+  const deleteId = await useDeletePerson({ personId: id })
+  persons.value = persons.value.filter((person) => person._id !== deleteId)
+}
 </script>

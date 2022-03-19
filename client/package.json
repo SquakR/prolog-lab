@@ -5,7 +5,7 @@
     "build": "nuxi build",
     "start": "node .output/server/index.mjs",
     "lint": "eslint . --ext .js,.ts,.vue",
-    "generate": "openapi --input http://localhost:8000/openapi.json --output ./api --client axios --name ApiClient --indent 2"
+    "generate": "openapi --input http://localhost:8000/openapi.json --output ./api --name ApiClient --client axios --indent 2 --useOptions"
   },
   "devDependencies": {
     "@types/cytoscape": "^3.19.4",

@@ -11,7 +11,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useProgramCode } from '~/data/lists'
+import { useProgramCode } from '~/requests/lists'
 
 definePageMeta({
   title: 'Lists'

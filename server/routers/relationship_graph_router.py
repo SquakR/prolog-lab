@@ -34,6 +34,7 @@ async def add_person(name: str, gender: Gender, person_collection: Collection = 
 async def delete_person(
     person_id: str, person_collection: Collection = Depends(get_person_collection)
 ):
+    print(person_id)
     await person_collection.delete_one({'_id': ObjectId(person_id)})
     return person_id
 
