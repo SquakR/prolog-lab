@@ -8,6 +8,7 @@
     "generate": "openapi --input http://localhost:8000/openapi.json --output ./api --client axios --name ApiClient --indent 2"
   },
   "devDependencies": {
+    "@types/cytoscape": "^3.19.4",
     "@typescript-eslint/eslint-plugin": "^5.15.0",
     "@typescript-eslint/parser": "^5.15.0",
     "@vue/eslint-config-typescript": "^10.0.0",
@@ -25,6 +26,7 @@
   "dependencies": {
     "@highlightjs/vue-plugin": "next",
     "axios": "^0.26.1",
+    "cytoscape": "^3.21.0",
     "vuetify": "3.0.0-alpha.13"
   }
 }

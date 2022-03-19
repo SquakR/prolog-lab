@@ -32,7 +32,7 @@ async def add_person(name: str, gender: Gender, person_collection: Collection = 
 
 @router.delete('/delete_person/')
 async def delete_person(
-        person_id: str, person_collection: Collection = Depends(get_person_collection)
+    person_id: str, person_collection: Collection = Depends(get_person_collection)
 ):
     await person_collection.delete_one({'_id': ObjectId(person_id)})
     return person_id
@@ -40,9 +40,9 @@ async def delete_person(
 
 @router.patch('/change_gender/')
 async def change_gender(
-        person_id: str,
-        gender: Gender,
-        person_collection: Collection = Depends(get_person_collection),
+    person_id: str,
+    gender: Gender,
+    person_collection: Collection = Depends(get_person_collection),
 ):
     await person_collection.update_one({'_id': ObjectId(person_id)}, {'$set': {'gender': gender}})
     return person_id
