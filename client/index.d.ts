@@ -1,14 +1,14 @@
-import { $Fetch } from 'ohmyfetch'
+import { ApiClient } from '~/api'
 
 declare module 'nuxt3/dist/app/nuxt' {
   interface NuxtApp {
-    $fetch: $Fetch
+    $api: ApiClient
   }
 }
 
 declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
-    $fetch: $Fetch
+    $api: ApiClient
   }
 }
 

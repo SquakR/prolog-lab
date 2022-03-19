@@ -1,9 +1,7 @@
-const prefix = 'lists/'
-
 export async function useProgramCode() {
-  const { $fetch } = useNuxtApp()
+  const { $api } = useNuxtApp()
   const { data } = await useAsyncData('ListsProgramCode', () =>
-    $fetch(prefix + 'program_code/')
+    $api.lists.programCodeApiListsProgramCodeGet()
   )
   return { data }
 }

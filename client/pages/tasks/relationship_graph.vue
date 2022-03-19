@@ -11,7 +11,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useProgramCode } from '@/http/relationship_graph'
+import { useProgramCode } from '~/data/relationship_graph'
 
 definePageMeta({
   title: 'Relationship graph'

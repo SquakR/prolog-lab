@@ -4,7 +4,8 @@
     "dev": "nuxi dev",
     "build": "nuxi build",
     "start": "node .output/server/index.mjs",
-    "lint": "eslint . --ext .js,.ts,.vue"
+    "lint": "eslint . --ext .js,.ts,.vue",
+    "generate": "openapi --input http://localhost:8000/openapi.json --output ./api --client axios --name ApiClient --indent 2"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.15.0",
@@ -14,13 +15,16 @@
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-nuxt": "^3.2.0",
     "eslint-plugin-vue": "^8.5.0",
+    "form-data": "4.x",
     "nuxt3": "latest",
+    "openapi-typescript-codegen": "^0.20.1",
     "prettier": "^2.5.1",
     "sass": "^1.49.9",
     "typescript": "^4.6.2"
   },
   "dependencies": {
     "@highlightjs/vue-plugin": "next",
+    "axios": "^0.26.1",
     "vuetify": "3.0.0-alpha.13"
   }
 }
