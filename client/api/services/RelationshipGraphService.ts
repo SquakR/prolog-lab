@@ -2,7 +2,9 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { Gender } from '../models/Gender';
-import type { Person } from '../models/Person';
+import type { InputPerson } from '../models/InputPerson';
+import type { Node } from '../models/Node';
+import type { OutputPerson } from '../models/OutputPerson';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
 import type { BaseHttpRequest } from '../core/BaseHttpRequest';
@@ -13,10 +15,10 @@ export class RelationshipGraphService {
 
   /**
    * Persons
-   * @returns Person Successful Response
+   * @returns OutputPerson Successful Response
    * @throws ApiError
    */
-  public personsApiRelationshipGraphPersonsGet(): CancelablePromise<Array<Person>> {
+  public personsApiRelationshipGraphPersonsGet(): CancelablePromise<Array<OutputPerson>> {
     return this.httpRequest.request({
       method: 'GET',
       url: '/api/relationship_graph/persons/',
@@ -25,23 +27,19 @@ export class RelationshipGraphService {
 
   /**
    * Add Person
-   * @returns Person Successful Response
+   * @returns OutputPerson Successful Response
    * @throws ApiError
    */
   public addPersonApiRelationshipGraphAddPersonPost({
-name,
-gender,
+requestBody,
 }: {
-name: string,
-gender: Gender,
-}): CancelablePromise<Person> {
+requestBody: InputPerson,
+}): CancelablePromise<OutputPerson> {
     return this.httpRequest.request({
       method: 'POST',
       url: '/api/relationship_graph/add_person/',
-      query: {
-        'name': name,
-        'gender': gender,
-      },
+      body: requestBody,
+      mediaType: 'application/json',
       errors: {
         422: `Validation Error`,
       },
@@ -64,6 +62,32 @@ personId: string,
       query: {
         'person_id': personId,
       },
+      errors: {
+        422: `Validation Error`,
+      },
+    });
+  }
+
+  /**
+   * Move
+   * @returns any Successful Response
+   * @throws ApiError
+   */
+  public moveApiRelationshipGraphMovePatch({
+personId,
+requestBody,
+}: {
+personId: string,
+requestBody: Node,
+}): CancelablePromise<any> {
+    return this.httpRequest.request({
+      method: 'PATCH',
+      url: '/api/relationship_graph/move',
+      query: {
+        'person_id': personId,
+      },
+      body: requestBody,
+      mediaType: 'application/json',
       errors: {
         422: `Validation Error`,
       },

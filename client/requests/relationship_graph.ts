@@ -8,6 +8,16 @@ export async function usePersons() {
   return { data }
 }
 
+type UseAddPersonParameter = Parameters<
+  typeof RelationshipGraphService.prototype.addPersonApiRelationshipGraphAddPersonPost
+>[0]
+export function useAddPerson(parameter: UseAddPersonParameter) {
+  const { $api } = useNuxtApp()
+  return $api.relationshipGraph.addPersonApiRelationshipGraphAddPersonPost(
+    parameter
+  )
+}
+
 type UseDeletePersonParameter = Parameters<
   typeof RelationshipGraphService.prototype.deletePersonApiRelationshipGraphDeletePersonDelete
 >[0]

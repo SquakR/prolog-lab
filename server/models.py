@@ -11,10 +11,23 @@ class Gender(str, Enum):
     FEMALE = 'female'
 
 
-class Person(BaseModel):
-    id: PyObjectId = Field(alias='_id')
+class Node(BaseModel):
+    x: float
+    y: float
+
+
+class BasePerson(BaseModel):
     name: str
     gender: Gender
+    node: Node
 
     class Config:
         json_encoders = {ObjectId: str}
+
+
+class InputPerson(BasePerson):
+    pass
+
+
+class OutputPerson(BasePerson):
+    id: PyObjectId = Field(alias='_id')

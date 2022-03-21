@@ -4,7 +4,7 @@ from motor.core import Collection
 from pymongo.results import InsertOneResult
 
 from database import get_person_collection
-from models import Gender, Person
+from models import Gender, InputPerson, Node, OutputPerson
 from prolog import relationship_graph_prolog_wrapper
 
 router = APIRouter(
@@ -13,19 +13,14 @@ router = APIRouter(
 )
 
 
-@router.get('/persons/', response_model=list[Person])
+@router.get('/persons/', response_model=list[OutputPerson])
 async def persons(person_collection: Collection = Depends(get_person_collection)):
     return [person async for person in person_collection.find()]
 
 
-@router.post('/add_person/', response_model=Person, status_code=status.HTTP_201_CREATED)
-async def add_person(name: str, gender: Gender, person_collection: Collection = Depends(get_person_collection)):
-    insert_result: InsertOneResult = await person_collection.insert_one(
-        {
-            'name': name,
-            'gender': gender
-        }
-    )
+@router.post('/add_person/', response_model=OutputPerson, status_code=status.HTTP_201_CREATED)
+async def add_person(person: InputPerson, person_collection: Collection = Depends(get_person_collection)):
+    insert_result: InsertOneResult = await person_collection.insert_one(person.dict())
     created_person = await person_collection.find_one({'_id': insert_result.inserted_id})
     return created_person
 
@@ -34,9 +29,13 @@ async def add_person(name: str, gender: Gender, person_collection: Collection = 
 async def delete_person(
     person_id: str, person_collection: Collection = Depends(get_person_collection)
 ):
-    print(person_id)
     await person_collection.delete_one({'_id': ObjectId(person_id)})
     return person_id
+
+
+@router.patch('/move')
+async def move(person_id: str, node: Node, person_collection: Collection = Depends(get_person_collection)):
+    return await person_collection.update_one({'_id': ObjectId(person_id)}, {'$set': {'node': node.dict()}})
 
 
 @router.patch('/change_gender/')
