@@ -25,7 +25,7 @@
 
 <script lang="ts" setup>
 import cytoscape, { Core, EventObjectNode, EventObjectCore } from 'cytoscape'
-import { Gender, InputPerson, OutputPerson } from '~/api'
+import { Gender, Node, InputPerson, OutputPerson } from '~/api'
 import AddNodeMenu, { AddNodeMenuProps } from '~/components/AddNodeMenu.vue'
 
 const props = defineProps<{
@@ -34,7 +34,8 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   (e: 'add-person', inputPerson: InputPerson): void
-  (e: 'delete-person', id: string): void
+  (e: 'move-person', personId: string, node: Node): void
+  (e: 'delete-person', personId: string): void
 }>()
 
 const graphContainerEl = ref<HTMLDivElement>(null)
@@ -115,6 +116,11 @@ onMounted(() => {
 
   graph.value.on('zoom', () => {
     addNodeMenuProps.value.visible = false
+  })
+
+  graph.value.on('dragfreeon', 'node', (event: EventObjectNode) => {
+    const person: OutputPerson = event.target.data()
+    emit('move-person', person._id, { ...event.target.position() })
   })
 
   graph.value.on('dblclick', 'node', (event: EventObjectNode) => {

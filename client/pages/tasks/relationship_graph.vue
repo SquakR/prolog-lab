@@ -4,8 +4,9 @@
       <h1>Relationship graph</h1>
       <PersonsGraph
         :persons="persons"
-        @add-person="addPerson"
-        @delete-person="deletePerson"
+        @add-person="addPersonHandler"
+        @move-person="movePersonHandler"
+        @delete-person="deletePersonHandler"
       />
     </VCol>
     <VCol cols="6">
@@ -18,11 +19,12 @@
 <script lang="ts" setup>
 import {
   usePersons,
-  useAddPerson,
-  useDeletePerson,
+  addPerson,
+  movePerson,
+  deletePerson,
   useProgramCode
 } from '~/requests/relationship_graph'
-import { InputPerson } from '~/api'
+import { Node, InputPerson } from '~/api'
 import PersonsGraph from '~/components/PersonsGraph.vue'
 
 definePageMeta({
@@ -32,13 +34,20 @@ definePageMeta({
 const { data: persons } = await usePersons()
 const { data: programCode } = await useProgramCode()
 
-const addPerson = async (person: InputPerson) => {
-  const newPerson = await useAddPerson({ requestBody: person })
+const addPersonHandler = async (person: InputPerson) => {
+  const newPerson = await addPerson({ requestBody: person })
   persons.value = [...persons.value, newPerson]
 }
 
-const deletePerson = async (id: string) => {
-  const deleteId = await useDeletePerson({ personId: id })
+const movePersonHandler = async (personId: string, node: Node) => {
+  await movePerson({
+    personId: personId,
+    requestBody: node
+  })
+}
+
+const deletePersonHandler = async (personId: string) => {
+  const deleteId = await deletePerson({ personId: personId })
   persons.value = persons.value.filter((person) => person._id !== deleteId)
 }
 </script>
