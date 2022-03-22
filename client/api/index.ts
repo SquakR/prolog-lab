@@ -14,6 +14,7 @@ export type { HTTPValidationError } from './models/HTTPValidationError';
 export type { InputPerson } from './models/InputPerson';
 export type { Node } from './models/Node';
 export type { OutputPerson } from './models/OutputPerson';
+export type { Parent } from './models/Parent';
 export type { ValidationError } from './models/ValidationError';
 
 export { AlgebraicProblemsService } from './services/AlgebraicProblemsService';

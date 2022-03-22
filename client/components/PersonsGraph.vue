@@ -25,11 +25,12 @@
 
 <script lang="ts" setup>
 import cytoscape, { Core, EventObjectNode, EventObjectCore } from 'cytoscape'
-import { Gender, Node, InputPerson, OutputPerson } from '~/api'
+import { Gender, Node, InputPerson, OutputPerson, Parent } from '~/api'
 import AddNodeMenu, { AddNodeMenuProps } from '~/components/AddNodeMenu.vue'
 
 const props = defineProps<{
   persons: OutputPerson[]
+  parents: Parent[]
 }>()
 
 const emit = defineEmits<{
@@ -62,21 +63,41 @@ onMounted(() => {
   graph.value = cytoscape({
     container: graphEl.value,
     layout: { name: 'preset' },
-    elements: props.persons.map((person) => ({
-      group: 'nodes',
-      style: {
-        'background-color': person.gender === Gender.MALE ? 'blue' : 'red'
-      },
-      position: {
-        ...person.node
-      },
-      data: person
-    })),
+    elements: {
+      nodes: props.persons.map((person) => ({
+        style: {
+          'background-color': person.gender === Gender.MALE ? 'blue' : 'red'
+        },
+        position: {
+          ...person.node
+        },
+        data: { id: person._id, ...person }
+      })),
+      edges: props.parents.map((parent) => ({
+        data: {
+          id: parent._id,
+          source: parent.parent_id,
+          target: parent.child_id
+        }
+      }))
+    },
     style: [
       {
         selector: 'node',
         style: {
-          label: 'data(name)'
+          label: 'data(name)',
+          width: 25,
+          height: 25
+        }
+      },
+      {
+        selector: 'edge',
+        style: {
+          width: 2,
+          'line-color': 'black',
+          'target-arrow-shape': 'triangle',
+          'target-arrow-color': 'black',
+          'curve-style': 'straight'
         }
       }
     ]
@@ -140,7 +161,7 @@ const addPerson = (persons: OutputPerson[]) => {
       position: {
         ...person.node
       },
-      data: person
+      data: { id: person._id, ...person }
     })
   })
 }

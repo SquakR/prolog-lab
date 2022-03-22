@@ -3,8 +3,8 @@ from fastapi import APIRouter, Depends, status
 from motor.core import Collection
 from pymongo.results import InsertOneResult
 
-from database import get_person_collection
-from models import InputPerson, Node, OutputPerson
+from database import get_parent_collection, get_person_collection
+from models import InputPerson, Node, OutputPerson, Parent
 from prolog import relationship_graph_prolog_wrapper
 
 router = APIRouter(
@@ -16,6 +16,11 @@ router = APIRouter(
 @router.get('/persons/', response_model=list[OutputPerson])
 async def persons(person_collection: Collection = Depends(get_person_collection)):
     return [person async for person in person_collection.find()]
+
+
+@router.get('/parents', response_model=list[Parent])
+async def parents(parent_collection: Collection = Depends(get_parent_collection)):
+    return [parent async for parent in parent_collection.find()]
 
 
 @router.post('/add_person/', response_model=OutputPerson, status_code=status.HTTP_201_CREATED)

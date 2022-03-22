@@ -31,3 +31,12 @@ class InputPerson(BasePerson):
 
 class OutputPerson(BasePerson):
     id: PyObjectId = Field(alias='_id')
+
+
+class Parent(BaseModel):
+    id: PyObjectId = Field(alias='_id')
+    parent_id: PyObjectId
+    child_id: PyObjectId
+
+    class Config:
+        json_encoders = {ObjectId: str}

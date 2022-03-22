@@ -4,6 +4,7 @@
       <h1>Relationship graph</h1>
       <PersonsGraph
         :persons="persons"
+        :parents="parents"
         @add-person="addPersonHandler"
         @move-person="movePersonHandler"
         @delete-person="deletePersonHandler"
@@ -19,10 +20,11 @@
 <script lang="ts" setup>
 import {
   usePersons,
+  useParents,
+  useProgramCode,
   addPerson,
   movePerson,
-  deletePerson,
-  useProgramCode
+  deletePerson
 } from '~/requests/relationship_graph'
 import { Node, InputPerson } from '~/api'
 import PersonsGraph from '~/components/PersonsGraph.vue'
@@ -32,6 +34,7 @@ definePageMeta({
 })
 
 const { data: persons } = await usePersons()
+const { data: parents } = await useParents()
 const { data: programCode } = await useProgramCode()
 
 const addPersonHandler = async (person: InputPerson) => {

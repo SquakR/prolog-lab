@@ -2,18 +2,23 @@ import { RelationshipGraphService } from '~/api'
 
 export async function usePersons() {
   const { $api } = useNuxtApp()
-  const { data } = await useAsyncData('RelationshipGraphPersons', () =>
+  return await useAsyncData('RelationshipGraphPersons', () =>
     $api.relationshipGraph.personsApiRelationshipGraphPersonsGet()
   )
-  return { data }
+}
+
+export async function useParents() {
+  const { $api } = useNuxtApp()
+  return await useAsyncData('RelationshipGraphParents', () =>
+    $api.relationshipGraph.parentsApiRelationshipGraphParentsGet()
+  )
 }
 
 export async function useProgramCode() {
   const { $api } = useNuxtApp()
-  const { data } = await useAsyncData('RelationshipGraphProgramCode', () =>
+  return await useAsyncData('RelationshipGraphProgramCode', () =>
     $api.relationshipGraph.programCodeApiRelationshipGraphProgramCodeGet()
   )
-  return { data }
 }
 
 type AddPersonParameter = Parameters<

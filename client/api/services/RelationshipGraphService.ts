@@ -4,6 +4,7 @@
 import type { InputPerson } from '../models/InputPerson';
 import type { Node } from '../models/Node';
 import type { OutputPerson } from '../models/OutputPerson';
+import type { Parent } from '../models/Parent';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
 import type { BaseHttpRequest } from '../core/BaseHttpRequest';
@@ -21,6 +22,18 @@ export class RelationshipGraphService {
     return this.httpRequest.request({
       method: 'GET',
       url: '/api/relationship_graph/persons/',
+    });
+  }
+
+  /**
+   * Parents
+   * @returns Parent Successful Response
+   * @throws ApiError
+   */
+  public parentsApiRelationshipGraphParentsGet(): CancelablePromise<Array<Parent>> {
+    return this.httpRequest.request({
+      method: 'GET',
+      url: '/api/relationship_graph/parents',
     });
   }
 
@@ -47,7 +60,7 @@ requestBody: InputPerson,
 
   /**
    * Move Person
-   * @returns any Successful Response
+   * @returns OutputPerson Successful Response
    * @throws ApiError
    */
   public movePersonApiRelationshipGraphMovePersonPatch({
@@ -56,7 +69,7 @@ requestBody,
 }: {
 personId: string,
 requestBody: Node,
-}): CancelablePromise<any> {
+}): CancelablePromise<OutputPerson> {
     return this.httpRequest.request({
       method: 'PATCH',
       url: '/api/relationship_graph/move_person',
