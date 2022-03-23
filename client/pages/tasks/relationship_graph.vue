@@ -52,8 +52,15 @@ const movePersonHandler = async (personId: string, node: Node) => {
 }
 
 const deletePersonHandler = async (personId: string) => {
-  const deleteId = await deletePerson({ personId: personId })
-  persons.value = persons.value.filter((person) => person._id !== deleteId)
+  const deletedObjects = await deletePerson({ personId: personId })
+  persons.value = persons.value.filter(
+    (person) =>
+      !deletedObjects.person_ids.find((personId) => person._id === personId)
+  )
+  parents.value = parents.value.filter(
+    (parent) =>
+      !deletedObjects.parent_ids.find((parentId) => parent._id === parentId)
+  )
 }
 
 const addParentHandler = async (parentId: string, childId: string) => {

@@ -1,6 +1,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { DeletedObjects } from '../models/DeletedObjects';
 import type { InputPerson } from '../models/InputPerson';
 import type { Node } from '../models/Node';
 import type { OutputPerson } from '../models/OutputPerson';
@@ -86,14 +87,14 @@ requestBody: Node,
 
   /**
    * Delete Person
-   * @returns any Successful Response
+   * @returns DeletedObjects Successful Response
    * @throws ApiError
    */
   public deletePersonApiRelationshipGraphDeletePersonDelete({
 personId,
 }: {
 personId: string,
-}): CancelablePromise<any> {
+}): CancelablePromise<DeletedObjects> {
     return this.httpRequest.request({
       method: 'DELETE',
       url: '/api/relationship_graph/delete_person/',

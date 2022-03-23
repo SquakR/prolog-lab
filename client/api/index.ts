@@ -9,6 +9,7 @@ export { CancelablePromise, CancelError } from './core/CancelablePromise';
 export { OpenAPI } from './core/OpenAPI';
 export type { OpenAPIConfig } from './core/OpenAPI';
 
+export type { DeletedObjects } from './models/DeletedObjects';
 export { Gender } from './models/Gender';
 export type { HTTPValidationError } from './models/HTTPValidationError';
 export type { InputPerson } from './models/InputPerson';

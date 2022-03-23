@@ -4,7 +4,7 @@ from motor.core import Collection
 from pymongo.results import InsertOneResult
 
 from database import get_parent_collection, get_person_collection
-from models import InputPerson, Node, OutputPerson, Parent
+from models import DeletedObjects, InputPerson, Node, OutputPerson, Parent
 from prolog import relationship_graph_prolog_wrapper
 
 router = APIRouter(
@@ -35,12 +35,26 @@ async def move_person(person_id: str, node: Node, person_collection: Collection 
     return await person_collection.find_one_and_update({'_id': ObjectId(person_id)}, {'$set': {'node': node.dict()}})
 
 
-@router.delete('/delete_person/')
+@router.delete('/delete_person/', response_model=DeletedObjects)
 async def delete_person(
-    person_id: str, person_collection: Collection = Depends(get_person_collection)
+    person_id: str,
+    person_collection: Collection = Depends(get_person_collection),
+    parent_collection: Collection = Depends(get_parent_collection)
 ):
-    await person_collection.delete_one({'_id': ObjectId(person_id)})
-    return person_id
+    person_object_id = ObjectId(person_id)
+    await person_collection.delete_one({'_id': person_object_id})
+    parent_ids = [parent['_id'] async for parent in parent_collection.find(
+        {'$or': [
+            {'parent_id': person_object_id},
+            {'child_id': person_object_id}
+        ]}
+    )]
+    for parent_id in parent_ids:
+        await parent_collection.delete_one({'_id': parent_id})
+    return {
+        'person_ids': [person_id],
+        'parent_ids': parent_ids
+    }
 
 
 @router.post('/add_parent/', response_model=Parent)

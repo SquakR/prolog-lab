@@ -6,6 +6,11 @@ from pydantic import BaseModel, Field
 from utils import PyObjectId
 
 
+class WithId(BaseModel):
+    class Config:
+        json_encoders = {ObjectId: str}
+
+
 class Gender(str, Enum):
     MALE = 'male'
     FEMALE = 'female'
@@ -16,13 +21,10 @@ class Node(BaseModel):
     y: float
 
 
-class BasePerson(BaseModel):
+class BasePerson(WithId):
     name: str
     gender: Gender
     node: Node
-
-    class Config:
-        json_encoders = {ObjectId: str}
 
 
 class InputPerson(BasePerson):
@@ -33,10 +35,12 @@ class OutputPerson(BasePerson):
     id: PyObjectId = Field(alias='_id')
 
 
-class Parent(BaseModel):
+class Parent(WithId):
     id: PyObjectId = Field(alias='_id')
     parent_id: PyObjectId
     child_id: PyObjectId
 
-    class Config:
-        json_encoders = {ObjectId: str}
+
+class DeletedObjects(WithId):
+    person_ids: list[PyObjectId]
+    parent_ids: list[PyObjectId]

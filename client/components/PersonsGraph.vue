@@ -189,7 +189,9 @@ onMounted(() => {
     event.preventDefault()
     const person: OutputPerson = event.target.data()
     if (inputParent.value) {
-      emit('add-parent', inputParent.value, person._id)
+      if (inputParent.value !== person._id) {
+        emit('add-parent', inputParent.value, person._id)
+      }
       clearInputParent()
     } else {
       inputParent.value = person._id
@@ -232,7 +234,9 @@ const addParents = (parents: Parent[]) => {
 }
 
 const deleteParents = (parents: Parent[]) => {
-  console.log(parents)
+  parents.forEach((parent) => {
+    graph.value.remove(`edge[_id = "${parent._id}"]`)
+  })
 }
 
 watch(
