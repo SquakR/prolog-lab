@@ -18,7 +18,7 @@ async def persons(person_collection: Collection = Depends(get_person_collection)
     return [person async for person in person_collection.find()]
 
 
-@router.get('/parents', response_model=list[Parent])
+@router.get('/parents/', response_model=list[Parent])
 async def parents(parent_collection: Collection = Depends(get_parent_collection)):
     return [parent async for parent in parent_collection.find()]
 
@@ -30,7 +30,7 @@ async def add_person(person: InputPerson, person_collection: Collection = Depend
     return created_person
 
 
-@router.patch('/move_person', response_model=OutputPerson)
+@router.patch('/move_person/', response_model=OutputPerson)
 async def move_person(person_id: str, node: Node, person_collection: Collection = Depends(get_person_collection)):
     return await person_collection.find_one_and_update({'_id': ObjectId(person_id)}, {'$set': {'node': node.dict()}})
 
@@ -41,6 +41,18 @@ async def delete_person(
 ):
     await person_collection.delete_one({'_id': ObjectId(person_id)})
     return person_id
+
+
+@router.post('/add_parent/', response_model=Parent)
+async def add_parent(parent_id: str, child_id: str, parent_collection: Collection = Depends(get_parent_collection)):
+    insert_result: InsertOneResult = await parent_collection.insert_one(
+        {
+            'parent_id': ObjectId(parent_id),
+            'child_id': ObjectId(child_id)
+        }
+    )
+    created_parent = await parent_collection.find_one({'_id': insert_result.inserted_id})
+    return created_parent
 
 
 @router.get('/program_code/')

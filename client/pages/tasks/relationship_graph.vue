@@ -8,6 +8,7 @@
         @add-person="addPersonHandler"
         @move-person="movePersonHandler"
         @delete-person="deletePersonHandler"
+        @add-parent="addParentHandler"
       />
     </VCol>
     <VCol cols="6">
@@ -24,7 +25,8 @@ import {
   useProgramCode,
   addPerson,
   movePerson,
-  deletePerson
+  deletePerson,
+  addParent
 } from '~/requests/relationship_graph'
 import { Node, InputPerson } from '~/api'
 import PersonsGraph from '~/components/PersonsGraph.vue'
@@ -52,5 +54,10 @@ const movePersonHandler = async (personId: string, node: Node) => {
 const deletePersonHandler = async (personId: string) => {
   const deleteId = await deletePerson({ personId: personId })
   persons.value = persons.value.filter((person) => person._id !== deleteId)
+}
+
+const addParentHandler = async (parentId: string, childId: string) => {
+  const newParent = await addParent({ parentId, childId })
+  parents.value = [...parents.value, newParent]
 }
 </script>

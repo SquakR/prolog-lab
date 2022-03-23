@@ -26,7 +26,13 @@
 <script lang="ts" setup>
 import cytoscape, { Core, EventObjectNode, EventObjectCore } from 'cytoscape'
 import { Gender, Node, InputPerson, OutputPerson, Parent } from '~/api'
+import { difference } from '~/utils'
 import AddNodeMenu, { AddNodeMenuProps } from '~/components/AddNodeMenu.vue'
+
+type Position = {
+  x: number
+  y: number
+}
 
 const props = defineProps<{
   persons: OutputPerson[]
@@ -37,6 +43,7 @@ const emit = defineEmits<{
   (e: 'add-person', inputPerson: InputPerson): void
   (e: 'move-person', personId: string, node: Node): void
   (e: 'delete-person', personId: string): void
+  (e: 'add-parent', parentId: string, childId: string): void
 }>()
 
 const graphContainerEl = ref<HTMLDivElement>(null)
@@ -50,6 +57,31 @@ const addNodeMenuProps = ref<Omit<AddNodeMenuProps, 'modelValue'>>({
   top: 0
 })
 
+const openAddNodeMenu = async (offset: Position, position: Position) => {
+  addNodeMenuProps.value.visible = true
+  addNodeMenuProps.value.left = Number.MAX_VALUE
+  addNodeMenuProps.value.top = Number.MAX_VALUE
+  await nextTick()
+  addNodeMenuProps.value.left = Math.min(
+    graphContainerEl.value.offsetWidth - addNodeMenu.value.$el.offsetWidth,
+    offset.x
+  )
+  addNodeMenuProps.value.top = Math.min(
+    graphContainerEl.value.offsetHeight - addNodeMenu.value.$el.offsetHeight,
+    offset.y
+  )
+  inputPerson.value.node = { ...position }
+}
+
+const hideAddNodeMenu = () => {
+  addNodeMenuProps.value.visible = false
+}
+
+const addPersonClick = () => {
+  emit('add-person', inputPerson.value)
+  addNodeMenuProps.value.visible = false
+}
+
 const inputPerson = ref<InputPerson>({
   name: '',
   gender: Gender.FEMALE,
@@ -58,6 +90,12 @@ const inputPerson = ref<InputPerson>({
     y: 0
   }
 })
+
+const inputParent = ref<string | null>(null)
+
+const clearInputParent = () => {
+  inputParent.value = null
+}
 
 onMounted(() => {
   graph.value = cytoscape({
@@ -104,39 +142,36 @@ onMounted(() => {
   })
 
   graph.value.on('dblclick', async (event: EventObjectCore) => {
+    await nextTick()
     if (event.isDefaultPrevented()) {
       return
     }
-    await nextTick()
-    addNodeMenuProps.value.visible = true
-    addNodeMenuProps.value.left = Number.MAX_VALUE
-    addNodeMenuProps.value.top = Number.MAX_VALUE
-    await nextTick()
-    addNodeMenuProps.value.left = Math.min(
-      graphContainerEl.value.offsetWidth - addNodeMenu.value.$el.offsetWidth,
-      event.originalEvent.offsetX
+    clearInputParent()
+    await openAddNodeMenu(
+      { x: event.originalEvent.offsetX, y: event.originalEvent.offsetY },
+      event.position
     )
-    addNodeMenuProps.value.top = Math.min(
-      graphContainerEl.value.offsetHeight - addNodeMenu.value.$el.offsetHeight,
-      event.originalEvent.offsetY
-    )
-    inputPerson.value.node = { ...event.position }
   })
 
-  graph.value.on('click', () => {
-    nextTick(() => {
-      if (addNodeMenuProps.value.visible) {
-        addNodeMenuProps.value.visible = false
-      }
-    })
+  graph.value.on('click', async (event: EventObjectCore) => {
+    await nextTick()
+    if (event.isDefaultPrevented()) {
+      return
+    }
+    clearInputParent()
+    hideAddNodeMenu()
   })
 
   graph.value.on('dragpan', () => {
-    addNodeMenuProps.value.visible = false
+    hideAddNodeMenu()
   })
 
   graph.value.on('zoom', () => {
-    addNodeMenuProps.value.visible = false
+    hideAddNodeMenu()
+  })
+
+  graph.value.on('grabon', () => {
+    hideAddNodeMenu()
   })
 
   graph.value.on('dragfreeon', 'node', (event: EventObjectNode) => {
@@ -145,13 +180,24 @@ onMounted(() => {
   })
 
   graph.value.on('dblclick', 'node', (event: EventObjectNode) => {
+    event.preventDefault()
     const person: OutputPerson = event.target.data()
     emit('delete-person', person._id)
+  })
+
+  graph.value.on('click', 'node', (event: EventObjectNode) => {
     event.preventDefault()
+    const person: OutputPerson = event.target.data()
+    if (inputParent.value) {
+      emit('add-parent', inputParent.value, person._id)
+      clearInputParent()
+    } else {
+      inputParent.value = person._id
+    }
   })
 })
 
-const addPerson = (persons: OutputPerson[]) => {
+const addPersons = (persons: OutputPerson[]) => {
   persons.forEach((person) => {
     graph.value.add({
       group: 'nodes',
@@ -166,34 +212,47 @@ const addPerson = (persons: OutputPerson[]) => {
   })
 }
 
-const deletePerson = (persons: OutputPerson[]) => {
+const deletePersons = (persons: OutputPerson[]) => {
   persons.forEach((person) => {
     graph.value.remove(`node[_id = "${person._id}"]`)
   })
 }
 
-const addPersonClick = () => {
-  emit('add-person', inputPerson.value)
-  addNodeMenuProps.value.visible = false
+const addParents = (parents: Parent[]) => {
+  parents.forEach((parent) => {
+    graph.value.add({
+      group: 'edges',
+      data: {
+        id: parent._id,
+        source: parent.parent_id,
+        target: parent.child_id
+      }
+    })
+  })
+}
+
+const deleteParents = (parents: Parent[]) => {
+  console.log(parents)
 }
 
 watch(
   () => props.persons,
   (newPersons, oldPersons) => {
     if (newPersons.length > oldPersons.length) {
-      addPerson(
-        newPersons.filter(
-          (newPerson) =>
-            !oldPersons.find((oldPerson) => newPerson._id === oldPerson._id)
-        )
-      )
+      addPersons(difference(newPersons, oldPersons))
     } else if (oldPersons.length > newPersons.length) {
-      deletePerson(
-        oldPersons.filter(
-          (oldPerson) =>
-            !newPersons.find((newPerson) => oldPerson._id === newPerson._id)
-        )
-      )
+      deletePersons(difference(oldPersons, newPersons))
+    }
+  }
+)
+
+watch(
+  () => props.parents,
+  (newParents, oldParents) => {
+    if (newParents.length > oldParents.length) {
+      addParents(difference(newParents, oldParents))
+    } else if (oldParents.length > newParents.length) {
+      deleteParents(difference(oldParents, newParents))
     }
   }
 )

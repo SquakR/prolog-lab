@@ -33,7 +33,7 @@ export class RelationshipGraphService {
   public parentsApiRelationshipGraphParentsGet(): CancelablePromise<Array<Parent>> {
     return this.httpRequest.request({
       method: 'GET',
-      url: '/api/relationship_graph/parents',
+      url: '/api/relationship_graph/parents/',
     });
   }
 
@@ -72,7 +72,7 @@ requestBody: Node,
 }): CancelablePromise<OutputPerson> {
     return this.httpRequest.request({
       method: 'PATCH',
-      url: '/api/relationship_graph/move_person',
+      url: '/api/relationship_graph/move_person/',
       query: {
         'person_id': personId,
       },
@@ -99,6 +99,31 @@ personId: string,
       url: '/api/relationship_graph/delete_person/',
       query: {
         'person_id': personId,
+      },
+      errors: {
+        422: `Validation Error`,
+      },
+    });
+  }
+
+  /**
+   * Add Parent
+   * @returns Parent Successful Response
+   * @throws ApiError
+   */
+  public addParentApiRelationshipGraphAddParentPost({
+parentId,
+childId,
+}: {
+parentId: string,
+childId: string,
+}): CancelablePromise<Parent> {
+    return this.httpRequest.request({
+      method: 'POST',
+      url: '/api/relationship_graph/add_parent/',
+      query: {
+        'parent_id': parentId,
+        'child_id': childId,
       },
       errors: {
         422: `Validation Error`,

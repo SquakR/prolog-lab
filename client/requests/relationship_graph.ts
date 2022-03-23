@@ -21,7 +21,7 @@ export async function useProgramCode() {
   )
 }
 
-type AddPersonParameter = Parameters<
+export type AddPersonParameter = Parameters<
   typeof RelationshipGraphService.prototype.addPersonApiRelationshipGraphAddPersonPost
 >[0]
 export function addPerson(parameter: AddPersonParameter) {
@@ -31,7 +31,7 @@ export function addPerson(parameter: AddPersonParameter) {
   )
 }
 
-type MovePersonPersonParameter = Parameters<
+export type MovePersonPersonParameter = Parameters<
   typeof RelationshipGraphService.prototype.movePersonApiRelationshipGraphMovePersonPatch
 >[0]
 export function movePerson(parameter: MovePersonPersonParameter) {
@@ -41,12 +41,22 @@ export function movePerson(parameter: MovePersonPersonParameter) {
   )
 }
 
-type DeletePersonParameter = Parameters<
+export type DeletePersonParameter = Parameters<
   typeof RelationshipGraphService.prototype.deletePersonApiRelationshipGraphDeletePersonDelete
 >[0]
 export function deletePerson(parameter: DeletePersonParameter) {
   const { $api } = useNuxtApp()
   return $api.relationshipGraph.deletePersonApiRelationshipGraphDeletePersonDelete(
+    parameter
+  )
+}
+
+export type AddParentParameter = Parameters<
+  typeof RelationshipGraphService.prototype.addParentApiRelationshipGraphAddParentPost
+>[0]
+export function addParent(parameter: AddParentParameter) {
+  const { $api } = useNuxtApp()
+  return $api.relationshipGraph.addParentApiRelationshipGraphAddParentPost(
     parameter
   )
 }
