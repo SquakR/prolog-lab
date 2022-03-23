@@ -24,7 +24,12 @@
 </template>
 
 <script lang="ts" setup>
-import cytoscape, { Core, EventObjectNode, EventObjectCore } from 'cytoscape'
+import cytoscape, {
+  Core,
+  EventObjectNode,
+  EventObjectEdge,
+  EventObjectCore
+} from 'cytoscape'
 import { Gender, Node, InputPerson, OutputPerson, Parent } from '~/api'
 import { difference } from '~/utils'
 import AddNodeMenu, { AddNodeMenuProps } from '~/components/AddNodeMenu.vue'
@@ -44,6 +49,7 @@ const emit = defineEmits<{
   (e: 'move-person', personId: string, node: Node): void
   (e: 'delete-person', personId: string): void
   (e: 'add-parent', parentId: string, childId: string): void
+  (e: 'delete-parent', parentId: string): void
 }>()
 
 const graphContainerEl = ref<HTMLDivElement>(null)
@@ -114,6 +120,7 @@ onMounted(() => {
       edges: props.parents.map((parent) => ({
         data: {
           id: parent._id,
+          _id: parent._id,
           source: parent.parent_id,
           target: parent.child_id
         }
@@ -197,6 +204,12 @@ onMounted(() => {
       inputParent.value = person._id
     }
   })
+
+  graph.value.on('dblclick', 'edge', (event: EventObjectEdge) => {
+    event.preventDefault()
+    const parent: Parent = event.target.data()
+    emit('delete-parent', parent._id)
+  })
 })
 
 const addPersons = (persons: OutputPerson[]) => {
@@ -226,6 +239,7 @@ const addParents = (parents: Parent[]) => {
       group: 'edges',
       data: {
         id: parent._id,
+        _id: parent._id,
         source: parent.parent_id,
         target: parent.child_id
       }

@@ -60,3 +60,13 @@ export function addParent(parameter: AddParentParameter) {
     parameter
   )
 }
+
+export type DeleteParentParameter = Parameters<
+  typeof RelationshipGraphService.prototype.deleteParentApiRelationshipGraphDeleteParentDelete
+>[0]
+export function deleteParent(parameter: DeleteParentParameter) {
+  const { $api } = useNuxtApp()
+  return $api.relationshipGraph.deleteParentApiRelationshipGraphDeleteParentDelete(
+    parameter
+  )
+}

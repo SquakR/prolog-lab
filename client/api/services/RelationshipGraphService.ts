@@ -133,6 +133,28 @@ childId: string,
   }
 
   /**
+   * Delete Parent
+   * @returns DeletedObjects Successful Response
+   * @throws ApiError
+   */
+  public deleteParentApiRelationshipGraphDeleteParentDelete({
+parentId,
+}: {
+parentId: string,
+}): CancelablePromise<DeletedObjects> {
+    return this.httpRequest.request({
+      method: 'DELETE',
+      url: '/api/relationship_graph/delete_parent/',
+      query: {
+        'parent_id': parentId,
+      },
+      errors: {
+        422: `Validation Error`,
+      },
+    });
+  }
+
+  /**
    * Program Code
    * @returns any Successful Response
    * @throws ApiError

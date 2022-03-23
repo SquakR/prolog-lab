@@ -69,6 +69,15 @@ async def add_parent(parent_id: str, child_id: str, parent_collection: Collectio
     return created_parent
 
 
+@router.delete('/delete_parent/', response_model=DeletedObjects)
+async def delete_parent(parent_id: str, parent_collection: Collection = Depends(get_parent_collection)):
+    await parent_collection.delete_one({'_id': ObjectId(parent_id)})
+    return {
+        'person_ids': [],
+        'parent_ids': [parent_id]
+    }
+
+
 @router.get('/program_code/')
 async def program_code():
     return await relationship_graph_prolog_wrapper.program_code
